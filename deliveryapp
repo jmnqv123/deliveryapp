@@ -1,0 +1,65 @@
+import React, { useState } from 'react';
+
+function DeliveryApp() {
+  const [deliveries, setDeliveries] = useState([
+    { id: 1, address: 'Main St' },
+    { id: 2, address: ' Market St' },
+    { id: 3, address: ' Park Ave' }
+  ]);
+
+  const handleAddDelivery = (event) => {
+    event.preventDefault();
+    const newDelivery = {
+      id: deliveries.length + 1,
+      address: event.target.elements.address.value
+    };
+    setDeliveries([...deliveries, newDelivery]);
+  };
+
+  return (
+    <div>
+      <h1>Deliveries</h1>
+      <ul>
+        {deliveries.map((delivery) => (
+          <li key={delivery.id}>{delivery.address}</li>
+        ))}
+      </ul>
+      <form onSubmit={handleAddDelivery}>
+        <label>
+          Address:
+          <input type="text" name="address" />
+        </label>
+        <button type="submit">Add Delivery</button>
+      </form>
+    </div>
+  );
+}
+
+export default DeliveryApp;
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function DeliveryApp() {
+  const [deliveries, setDeliveries] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/deliveries')
+      .then((response) => {
+        setDeliveries(response.data);
+      });
+  }, []);
+
+  return (
+    <div>
+      <h1>Deliveries</h1>
+      <ul>
+        {deliveries.map((delivery) => (
+          <li key={delivery.id}>{delivery.address}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DeliveryApp;
+
